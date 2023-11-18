@@ -5,8 +5,9 @@
 }
 
 #mainPole{
-    margin-top: 120px;
-    margin-left: 500px;
+    margin-top: 150px;
+    margin-left: 400px;
+    font-size: 100px;
 }
 
 #eats{
@@ -22,6 +23,97 @@
     font-size: 25px;
 }
 
-#gamebebras{
-    color: aliceblue;
+#Down{
+    background-color: rgb(116, 24, 144);
+    opacity: 65%;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: solid white 2px;
+    transition: 0.3s,0.3s;
+    margin-top: 235px;
+    position: absolute;
+    margin-left: 115px;
+}
+#Down:hover{
+    opacity: 90%;
+}
+#Down:active{
+    background-color: black;
+}
+
+#Left{
+    background-color: rgb(116, 24, 144);
+    opacity: 65%;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: solid white 2px;
+    transition: 0.3s,0.3s;
+    position: absolute;
+    margin-top: 170px;
+    margin-left: 50px;
+}
+#Left:hover{
+    opacity: 90%;
+}
+#Left:active{
+    background-color: black;
+}
+
+#Right{
+    background-color: rgb(116, 24, 144);
+    opacity: 65%;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: solid white 2px;
+    transition: 0.3s,0.3s;
+    margin-top: 170px;
+    margin-left: 180px;
+    position: absolute;
+}
+#Right:hover{
+opacity: 90%;
+}
+#Right:active{
+    background-color: black;    
+}
+
+#Top{
+    background-color: rgb(116, 24, 144);
+    opacity: 65%;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: solid white 2px;
+    transition: 0.3s,0.3s;
+    position: absolute;
+    margin-top: 105px;
+    margin-left: 115px;
+}
+#Top:hover{
+    opacity: 90%;
+}
+#Top:active{
+    background-color: black;
+}
+
+#Space{
+    background-color: rgb(116, 24, 144);
+    opacity: 65%;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: solid white 2px;
+    transition: 0.3s,0.3s;
+    margin-top: 170px;
+    margin-left: 115px;
+    position: absolute;
+}
+#Space:hover{
+    opacity: 90%;
+}
+#Space:active{
+    background-color: black;
 }
