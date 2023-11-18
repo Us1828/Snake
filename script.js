@@ -1,60 +1,78 @@
 let mainPole = document.getElementById('mainPole')
 let score = document.getElementById('eats')
+const buttons = document.getElementById('buttons')
 let pole = 20
 let eats = 0
 let gameParam = false
-let players = [[1,1,'']]
+let players = [[1,1,'','']]
+let appleArray = [1,1]
 
 document.addEventListener('keydown',(event)=>{
     if(event.code == 'Space' && gameParam == false){
-        game()
+        document.getElementById('Space').style.display = 'none';
         gameParam = true
+        game()
     }
 },true)
 
 function game() {
-    for (let i = 0; i < players.length; i++) {
+    for (let i = 0; i < 1; i++) {
         move(i)
     }
 }
 
-document.addEventListener('load',()=>{
-    createPlayer()
-    createApple()    
-    createPole()  
-    scoreNum()    
+window.addEventListener('load',()=>{
+    createPlayer(0)
+    createApple()
+    createPole()
+    scoreNum()
 },true)
 
-function createPlayer() {
-    player = document.createElement('div');
-    player.style.backgroundColor = 'lightgreen';
-    player.style.width = '20px';
-    player.style.height = '20px';
-    player.style.transition =  '0.5s';
-    player.style.position = 'absolute';
-    player.style.marginLeft = '0px'
-    player.style.marginTop = '0px'
-    mainPole.prepend(player);
+function createPlayer(i) {
+    let x = players[i][0] * 20 - 20
+    let xx = x + 'px'
+    let y = players[i][1] * 20 - 20
+    let yy = y + 'px'
+    players[i][3] = document.createElement('div');
+    players[i][3].style.backgroundColor = 'lightgreen';
+    players[i][3].style.position = 'absolute';
+    players[i][3].style.width = '20px';
+    players[i][3].style.height = '20px';
+    players[i][3].style.transition =  '0.5s';
+    players[i][3].style.marginLeft = xx
+    players[i][3].style.marginTop = yy
+    if (i == 0) {
+        mainPole.prepend(players[i][3]);
+    }
+    else {
+        players[0][3].after(players[i][3]);
+    }
 }
 
 function createApple() {
+    appleArray[0] = getRandomInt(1,pole+1)
+    appleArray[1] = getRandomInt(1,pole+1)
+    let x = appleArray[0] * 20 - 20
+    let xx = x + 'px'
+    let y = appleArray[1] * 20 - 20
+    let yy = y + 'px'
     apple = document.createElement('div')
     apple.style.backgroundColor = 'red';
     apple.style.position = 'absolute';
     apple.style.height = '20px';
     apple.style.width ='20px';
-    apple.style.marginLeft = '0px'
-    apple.style.marginTop = '0px'
+    apple.style.marginLeft = xx
+    apple.style.marginTop = yy
     mainPole.prepend(apple)
 }
 
 function createPole() {
     let topOne = 0
     let topTwo = topOne + 'px'
-    for (let i = 0; i < pole; i++) {
+    for (let i = 1; i <= pole; i++) {
         let leftOne = 0
         let leftTwo = leftOne + 'px'
-        for (let c = 0; c < pole; c++) {
+        for (let c = 1; c <= pole; c++) {
             let div = document.createElement('div')
             div.style.width = '20px'
             div.style.height = '20px'
@@ -101,35 +119,55 @@ function move(i) {
             }
         }
     }, true)
-    setInterval(function(){
-        console.log(players[i][0],players[i][1]);
-        if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
-            console.log('loose');
-        }
+    let inter = setInterval(function(){
         switch (players[i][2]) {
             case 'W':
                 players[i][1] -= 1
-                player.style.transform += 'translateY(-20px)';
+                if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
+                    dead()
+                    players[i][2] = ''
+                    clearInterval(inter)
+                    break
+                }
+                players[i][3].style.transform += 'translateY(-20px)';
                 checkApple()
                 break;
                 
             case 'S':
                 players[i][1] += 1
-                player.style.transform += 'translateY(20px)';
+                if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
+                    dead()
+                    players[i][2] = ''
+                    clearInterval(inter)
+                    break
+                }
+                players[i][3].style.transform += 'translateY(20px)';
                 checkApple()
                 break;
                 
             case 'D':
                 players[i][0] += 1
-                player.style.transform += 'translateX(20px)';
+                if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
+                    dead()
+                    players[i][2] = ''
+                    clearInterval(inter)
+                    break
+                }
+                players[i][3].style.transform += 'translateX(20px)';
                 checkApple()
                 break;
 
             case 'A':
                 players[i][0] -= 1
-                player.style.transform += 'translateX(-20px)';
+                if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
+                    dead()
+                    players[i][2] = ''
+                    clearInterval(inter)
+                    break
+                }
+                players[i][3].style.transform += 'translateX(-20px)';
                 checkApple()
-                break;   
+                break
                 
             default:
                 break;
@@ -138,5 +176,73 @@ function move(i) {
 }
 
 function checkApple() {
+    if(appleArray[0] == players[0][0] && players[0][1] == appleArray[1]){
+        appleArray[0] = getRandomInt(1,pole)
+        appleArray[1] = getRandomInt(1,pole)
+        let x = appleArray[0] * 20 - 20
+        let xx = x + 'px'
+        let y = appleArray[1] * 20 - 20
+        let yy = y + 'px'
+        apple.style.marginLeft = xx
+        apple.style.marginTop = yy
+        newPlayer()
+        score.textContent++; 
+    }   
+}
 
+function dead() {
+    gameParam = false
+    const dead = document.createElement('div')
+    dead.classList = 'dead'
+    dead.style.display = 'block'
+    dead.textContent = 'Game Over'
+    dead.style.position = 'absolute'
+    mainPole.prepend(dead)
+    mainPole.textContent = 'Game Over'
+    mainPole.style.color = 'white'
+    score.style.display = 'none'
+}
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+buttons.addEventListener('click',(event=>{
+    if(event.target.closest('#Space')){
+        if(gameParam == false){
+            document.getElementById('Space').style.display = 'none';
+            gameParam = true
+            game()
+        }
+    }
+    if(event.target.closest('#Left')){
+        if(players[0][2] != 'D'){
+            players[0][2] = 'A';
+        }
+    }
+    if(event.target.closest('#Right')){
+        if(players[0][2] != 'A'){
+            players[0][2] = 'D'
+        }
+    }
+    if(event.target.closest('#Down')){
+        if(players[0][2] !='W'){
+            players[0][2] = 'S';
+        }
+    }
+    if(event.target.closest('#Top')){
+        if(players[0][2] != 'S'){
+            players[0][2] = 'W';
+        }
+    }
+}))
+
+function newPlayer() {
+    let a = players[0][0]
+    let b = players[0][1]
+    let c = players[0][2]
+    players.push([a, b, c, ''])
+    createPlayer(players.length-1)
 }
