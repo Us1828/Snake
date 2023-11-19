@@ -117,3 +117,22 @@ opacity: 90%;
 #Space:active{
     background-color: black;
 }
+
+#cheat{
+    background-color: rgb(116, 24, 144);
+    opacity: 65%;
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    border: solid white 2px;
+    transition: 0.3s,0.3s;
+    margin-top: 0px;
+    margin-left: 115px;
+    position: absolute;
+}
+#cheat:hover{
+    opacity: 90%;
+}
+#cheat:active{
+    background-color: black;
+}
