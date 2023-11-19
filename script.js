@@ -6,6 +6,7 @@ let eats = 0
 let gameParam = false
 let players = [[1,1,'','']]
 let appleArray = [1,1]
+let isDead = false
 
 document.addEventListener('keydown',(event)=>{
     if(event.code == 'Space' && gameParam == false){
@@ -38,7 +39,7 @@ function createPlayer(i) {
     players[i][3].style.position = 'absolute';
     players[i][3].style.width = '20px';
     players[i][3].style.height = '20px';
-    players[i][3].style.transition =  '0.5s';
+    players[i][3].style.transition =  '0.1s';
     players[i][3].style.marginLeft = xx
     players[i][3].style.marginTop = yy
     if (i == 0) {
@@ -122,57 +123,83 @@ function move(i) {
     let inter = setInterval(function(){
         switch (players[i][2]) {
             case 'W':
-                players[i][1] -= 1
-                if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
-                    dead()
-                    players[i][2] = ''
+                isDead = moveSwitch('translateY(-20px)', -1, 1)
+                if (isDead == true) {
                     clearInterval(inter)
-                    break
                 }
-                players[i][3].style.transform += 'translateY(-20px)';
-                checkApple()
-                break;
+                break
                 
             case 'S':
-                players[i][1] += 1
-                if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
-                    dead()
-                    players[i][2] = ''
+                isDead = moveSwitch('translateY(20px)', +1, 1)
+                if (isDead == true) {
                     clearInterval(inter)
-                    break
                 }
-                players[i][3].style.transform += 'translateY(20px)';
-                checkApple()
-                break;
+                break
                 
             case 'D':
-                players[i][0] += 1
-                if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
-                    dead()
-                    players[i][2] = ''
+                isDead = moveSwitch('translateX(20px)', +1, 0)
+                if (isDead == true) {
                     clearInterval(inter)
-                    break
                 }
-                players[i][3].style.transform += 'translateX(20px)';
-                checkApple()
-                break;
+                break
 
             case 'A':
-                players[i][0] -= 1
-                if (players[i][0] <= 0 || players[i][0] > pole || players[i][1] <= 0 || players[i][1] > pole) {
-                    dead()
-                    players[i][2] = ''
+                isDead = moveSwitch('translateX(-20px)', -1, 0)
+                if (isDead == true) {
                     clearInterval(inter)
-                    break
                 }
-                players[i][3].style.transform += 'translateX(-20px)';
-                checkApple()
                 break
                 
             default:
                 break;
         }
-    },250)
+    },100)
+}
+
+function moveSwitch(trans, coord, XorY) {
+    players[0][XorY] = players[0][XorY] + coord
+    if (players[0][0] <= 0 || players[0][0] > pole || players[0][1] <= 0 || players[0][1] > pole) {
+        dead()
+        players[0][2] = ''
+        return true
+    }
+    players[0][3].style.transform += trans;
+    movePlayers(coord)
+    checkApple()
+    console.log(players);
+}
+
+function movePlayers() {
+    for (let i = players.length-1; i > 0; i--) {
+        let XorY = ''
+        let trans = ''
+        let coord = 0
+        if (players[i][2] == 'W'){
+            XorY = 1
+            coord += -1
+            trans = 'translateY(-20px)'
+        }
+        if (players[i][2] == 'S'){
+            XorY = 1
+            coord += 1
+            trans = 'translateY(20px)'
+        }
+        if (players[i][2] == 'D'){
+            XorY = 0
+            coord += 1
+            trans = 'translateX(20px)'
+        }
+        if (players[i][2] == 'A'){
+            XorY = 0
+            coord += -1
+            trans = 'translateX(-20px)'
+        }
+
+        players[i][2] = players[i-1][2]
+        players[i][XorY] = players[i][XorY] + coord
+        players[i][3].style.transform += trans;
+        
+    }
 }
 
 function checkApple() {
@@ -240,9 +267,21 @@ buttons.addEventListener('click',(event=>{
 }))
 
 function newPlayer() {
-    let a = players[0][0]
-    let b = players[0][1]
-    let c = players[0][2]
+    let c = players[players.length-1][2]
+    let a = players[players.length-1][0]
+    let b = players[players.length-1][1]
+    if (c == 'W') {
+        b += 1
+    }
+    if (c == 'S') {
+        b += -1
+    }
+    if (c == 'D') {
+        a += -1
+    }
+    if (c == 'A') {
+        a += 1
+    }
     players.push([a, b, c, ''])
     createPlayer(players.length-1)
 }
