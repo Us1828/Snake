@@ -1,6 +1,7 @@
 let mainPole = document.getElementById('mainPole')
 let score = document.getElementById('eats')
 const buttons = document.getElementById('buttons')
+let cheat = document.getElementById('cheat')
 let pole = 20
 let eats = 0
 let gameParam = false
@@ -39,7 +40,7 @@ function createPlayer(i) {
     players[i][3].style.position = 'absolute';
     players[i][3].style.width = '20px';
     players[i][3].style.height = '20px';
-    players[i][3].style.transition =  '0.1s';
+    players[i][3].style.transition =  '0.3s';
     players[i][3].style.marginLeft = xx
     players[i][3].style.marginTop = yy
     if (i == 0) {
@@ -153,7 +154,7 @@ function move(i) {
             default:
                 break;
         }
-    },100)
+    },200)
 }
 
 function moveSwitch(trans, coord, XorY) {
@@ -165,8 +166,20 @@ function moveSwitch(trans, coord, XorY) {
     }
     players[0][3].style.transform += trans;
     movePlayers(coord)
+    if (checkPlayer() == true) {
+        dead()
+        players[0][2] = ''
+        return true
+    }
     checkApple()
-    console.log(players);
+}
+
+function checkPlayer() {
+    for (let i = 1; i < players.length; i++) {
+        if (players[i][0] == players[0][0] && players[i][1] == players[0][1]) {
+            return true
+        }
+    }
 }
 
 function movePlayers() {
@@ -204,8 +217,8 @@ function movePlayers() {
 
 function checkApple() {
     if(appleArray[0] == players[0][0] && players[0][1] == appleArray[1]){
-        appleArray[0] = getRandomInt(1,pole)
-        appleArray[1] = getRandomInt(1,pole)
+        appleArray[0] = getRandomInt(1,pole+1)
+        appleArray[1] = getRandomInt(1,pole+1)
         let x = appleArray[0] * 20 - 20
         let xx = x + 'px'
         let y = appleArray[1] * 20 - 20
@@ -213,7 +226,7 @@ function checkApple() {
         apple.style.marginLeft = xx
         apple.style.marginTop = yy
         newPlayer()
-        score.textContent++; 
+        score.textContent = players.length-1
     }   
 }
 
@@ -237,6 +250,12 @@ function getRandomInt(min, max) {
 }
 
 buttons.addEventListener('click',(event=>{
+    if(event.target.closest('#cheat')){
+        for (let i = 1; i <= 10; i++) {
+            newPlayer()
+        }
+        score.textContent = players.length-1
+    }
     if(event.target.closest('#Space')){
         if(gameParam == false){
             document.getElementById('Space').style.display = 'none';
